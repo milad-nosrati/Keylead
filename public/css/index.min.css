@@ -1,0 +1,17 @@
+body {
+    background-color: #fff;
+    font-size: 14px;
+    color: #616161;
+    direction: rtl;
+    text-align: right;
+    margin: 0%;
+    padding: 0%;
+    font-family: 'Open Sans', sans-serif;}
+.headerRow {
+    background-color: #810b03;
+    color: #ffff;
+}
+.btn-el {
+    font-family: 'Open Sans', sans-serif;;
+    font-size: 0.8em;
+}
