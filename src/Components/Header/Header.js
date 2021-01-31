@@ -1,0 +1,33 @@
+import React, { Component } from "react";
+import Logo from "./Components/Logo";
+import Search from "./Components/Search";
+import Actions from "./Components/Actions";
+import { Navbar } from "reactstrap";
+
+export class Header extends Component {
+  constructor(props){
+    super(props);
+    this.handleAction = this.handleAction.bind(this);
+
+  }
+  handleAction(action , taskId, newValue){
+    this.props.action(action , taskId, newValue);
+  }
+  
+  render() {
+    return (
+        <Navbar          
+          expand="md"
+          className="d-flex justify-content-between align-items-center nav-bg"
+        >
+          <Logo />
+          <Search  action = {this.handleAction} />
+          <Actions 
+                        action = {this.handleAction} 
+                        />
+        </Navbar>
+    );
+  }
+}
+
+export default Header;

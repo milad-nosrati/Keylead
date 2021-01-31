@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import Todoapp from './Components/Todoapp';
+import TodoApp from './TodoApp';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
-ReactDOM.render(<Todoapp />, document.getElementById('root'));
+ReactDOM.render(<TodoApp />, document.getElementById('root'));
 
 serviceWorker.unregister();
