@@ -41,7 +41,6 @@ class AddNewTask extends React.Component {
       newTask.task = this.state.newTaskTitle;
       newTask.isStared = this.state.newTaskisStared;
       newTask.date = this.state.newTaskDate ;
-      console.log(newTask)
       this.props.updateNewTask("addNewTask", "Task ID", newTask);
     }
 

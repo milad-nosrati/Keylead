@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Header from "./Components/Header";
 import Aside from "./Components/Aside";
 import TodoListBox from "./Components/TodoListBox";
-import AddNewTask from "./Components/AddNewTask"
+import AddNewTask from "./Components/AddNewTask";
+import axios from 'axios';
+import ReactPlayer from 'react-player';
 
 export class TodoApp extends Component {
   constructor(props) {
@@ -13,12 +15,15 @@ export class TodoApp extends Component {
       todayTasksCount: 0,
       importantTasksCount: 0,
       totalTasksCount: 0,
-      currentSection: "all"
+      currentSection: "all",
+      addCounter: 0,
+      videoLink: 'https://static.cdn.asset.aparat.com/avt/29522670_15s.mp4'
     };
 
     this.updateContents = this.updateContents.bind(this);
     this.toggleCompleted = this.toggleCompleted.bind(this);
     this.handleNewItem = this.handleNewItem.bind(this);
+    this.checkAdPlayback = this.checkAdPlayback.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.taskCounter = this.taskCounter.bind(this);
     this.updateCurrentList = this.updateCurrentList.bind(this);
@@ -55,9 +60,33 @@ export class TodoApp extends Component {
     
     console.log(newTask);
     const newMasterList = [...this.state.masterList, newTask];
-    this.setState({ masterList: newMasterList }, this.taskCounter());
+    const newCounter = this.state.addCounter + 1;
+    this.setState({ 
+      masterList: newMasterList,
+      addCounter: newCounter
+    }, this.checkAdPlayback);
   };
 
+  checkAdPlayback=() =>{
+    if(this.state.addCounter > 1){
+      axios.get(`http://api.aparat.com/fa/v1/video/video/mostViewedVideos`)
+      .then(res => {
+        let link = res.data[0].attributes.preview_src;
+        this.setState({
+          videoLink: link
+        })
+      })
+  
+      console.log('show ads');
+      this.setState({
+        addCounter: 0
+      })
+    }
+    this.playVideo(this.state.videoLink)
+  }
+  playVideo = (vlink)=>{
+    
+  } 
   updateCurrentList = (currentState) => {
     let filteredList = [];
     if (currentState === "all") {
@@ -193,6 +222,10 @@ export class TodoApp extends Component {
               action={this.handleAction}
             />
           </div>
+          <ReactPlayer url={this.state.videoLink}
+                        playing = {true}
+          />
+
         </div>
       </div>
     );
