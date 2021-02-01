@@ -81,7 +81,7 @@ export class TodoApp extends Component {
   checkAdPlayback = () => {
     if (this.state.addCounter > 4) {
       //PLease Note, aparat will not let you get the api from development environment - API can only be fetched from server.
-      axios.get(`http://api.aparat.com/fa/v1/video/video/mostViewedVideos`)
+      axios.get(`https://api.aparat.com/fa/v1/video/video/mostViewedVideos`)
         .then(res => {
           let link = res.data[0].attributes.preview_src;
           this.setState({
