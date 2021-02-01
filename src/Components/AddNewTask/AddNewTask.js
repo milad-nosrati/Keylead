@@ -12,7 +12,6 @@ class AddNewTask extends React.Component {
                     month: todayDate.getMonth()+1 , 
                     year:todayDate.getFullYear()},
       newTaskisStared: false,
-      addCounter: 0
     };
 
     this.handleCLickStar = this.handleCLickStar.bind(this);
@@ -41,21 +40,28 @@ class AddNewTask extends React.Component {
       newTask.task = this.state.newTaskTitle;
       newTask.isStared = this.state.newTaskisStared;
       newTask.date = this.state.newTaskDate ;
-      this.props.updateNewTask("addNewTask", "Task ID", newTask);
+      this.setState({
+        newTaskisStared: false,
+      })
+      this.props.updateNewTask("addNewTask", null, newTask);
     }
 
-    handleCLickStar = () => {
+    handleCLickStar () {
+      const starState = !this.state.newTaskisStared;
       this.setState({
-        newTaskisStared: !this.state.newTaskisStared
-      }, ()=> console.log(this.state.newTaskisStared))
+        newTaskisStared: starState,
+      });
     }
 
     handleKeyDown = (e) => {
       if (e.key === 'Enter') {
+        let newValue = e.target.value;
+        e.target.value="";
         this.setState({
-          newTaskTitle: e.target.value
+          newTaskTitle: newValue,
         }, this.handleAddItem);
       }
+      
     }
 
     render() {
@@ -63,11 +69,12 @@ class AddNewTask extends React.Component {
         <div>
           <InputGroup className="mb-3 list-bg rounded ">
             <InputGroup.Prepend >
-              <InputGroup.Text id="addNewTaskStar" className="no-border trans-bg">
-                <span
-                  onClick={this.handleCLickStar}
-                  className={`mr-2 fa fa-star ${this.state.newTaskisStared ? "star-golden" : "star-lightgrey"}`}
-                />
+              <InputGroup.Text id="addNewTaskStar" className="no-border trans-bg d-none d-sm-block">
+                <div 
+                onClick={this.handleCLickStar}
+                className={`${this.state.newTaskisStared ? "star-golden" : "star-lightgrey"}`}>
+                  <span className="mr-2 fa fa-star" />
+                </div>
               </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
@@ -79,7 +86,7 @@ class AddNewTask extends React.Component {
               onKeyDown={this.handleKeyDown}
             />
             <InputGroup.Append>
-              <InputGroup.Text id="addNewTaskDate" className="no-border trans-bg">
+              <InputGroup.Text id="addNewTaskDate" className="d-none d-sm-block no-border trans-bg light-text">
                 <DatePicker selectedDate={this.handleDateChange} />
               </InputGroup.Text>
             </InputGroup.Append>

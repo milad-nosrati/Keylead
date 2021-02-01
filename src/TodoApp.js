@@ -5,6 +5,7 @@ import TodoListBox from "./Components/TodoListBox";
 import AddNewTask from "./Components/AddNewTask";
 import axios from 'axios';
 import ReactPlayer from 'react-player';
+import { Modal } from 'react-bootstrap';
 
 export class TodoApp extends Component {
   constructor(props) {
@@ -17,7 +18,10 @@ export class TodoApp extends Component {
       totalTasksCount: 0,
       currentSection: "all",
       addCounter: 0,
-      videoLink: 'https://static.cdn.asset.aparat.com/avt/29522670_15s.mp4'
+      videoLink: 'https://static.cdn.asset.aparat.com/avt/29522670_15s.mp4',
+      playAd: false,
+      editMode: false,
+      targetTask: 0,
     };
 
     this.updateContents = this.updateContents.bind(this);
@@ -25,8 +29,9 @@ export class TodoApp extends Component {
     this.handleNewItem = this.handleNewItem.bind(this);
     this.checkAdPlayback = this.checkAdPlayback.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
-    this.taskCounter = this.taskCounter.bind(this);
+    this.taskcounter = this.taskCounter.bind(this);
     this.updateCurrentList = this.updateCurrentList.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this)
   }
 
   componentDidMount() {
@@ -44,50 +49,65 @@ export class TodoApp extends Component {
       return false
     }
   }
+  rearrangeIDs(){
+    let newMasterList = this.state.masterList;
+    for (let i=0; i<newMasterList.length; ++i){
+      newMasterList[i].id = i
+    }
+    this.setState({
+      masterlist: newMasterList,
+    });
+  }
 
 
 
-  sectionFix = () => {
-    this.updateCurrentList(this.state.currentSection);
-  };
+
 
   handleNewItem = (newTask) => {
-    if (this.state.masterList.length > 0 ){
-      newTask.id = (this.state.masterList[this.state.masterList.length-1].id)+1;
+    this.rearrangeIDs();
+    if (this.state.masterList.length > 0) {
+      newTask.id = (this.state.masterList[this.state.masterList.length - 1].id) + 1;
     } else {
       newTask.id = 1;
     }
-    
-    console.log(newTask);
     const newMasterList = [...this.state.masterList, newTask];
     const newCounter = this.state.addCounter + 1;
-    this.setState({ 
+    this.setState({
       masterList: newMasterList,
       addCounter: newCounter
     }, this.checkAdPlayback);
   };
 
-  checkAdPlayback=() =>{
-    if(this.state.addCounter > 1){
+  checkAdPlayback = () => {
+    if (this.state.addCounter > 4) {
+      //PLease Note, aparat will not let you get the api from development environment - API can only be fetched from server.
       axios.get(`http://api.aparat.com/fa/v1/video/video/mostViewedVideos`)
-      .then(res => {
-        let link = res.data[0].attributes.preview_src;
-        this.setState({
-          videoLink: link
+        .then(res => {
+          let link = res.data[0].attributes.preview_src;
+          this.setState({
+            videoLink: link
+          })
         })
-      })
-  
-      console.log('show ads');
       this.setState({
-        addCounter: 0
+        addCounter: 0,
+        playAd: true
+      })
+    } else {
+      this.setState({
+        playAd: false,
       })
     }
-    this.playVideo(this.state.videoLink)
+    this.updateCurrentList("all");
   }
-  playVideo = (vlink)=>{
-    
-  } 
+
+  handleModalClose = () => {
+    this.setState({
+      playAd: false,
+    })
+  }
+
   updateCurrentList = (currentState) => {
+    this.rearrangeIDs();
     let filteredList = [];
     if (currentState === "all") {
       filteredList = this.state.masterList;
@@ -97,7 +117,9 @@ export class TodoApp extends Component {
     }
     if (currentState === "important") {
       filteredList = this.state.masterList.filter((task) => task.isStared === true);
-
+    }
+    if(currentState === "search"){
+      filteredList = this.state.currentList;
     }
     this.setState({
       currentSection: currentState,
@@ -108,13 +130,12 @@ export class TodoApp extends Component {
   taskCounter() {
     const active = this.state.masterList.filter((task) => task.isCompleted !== true);
     const imp = active.filter((task) => task.isStared === true);
-    const today = active.filter((task) => this.formatDate(task.date))
+    const today = active.filter((task) => this.formatDate(task.date));
     this.setState({
       totalTasksCount: active.length,
       todayTasksCount: today.length,
       importantTasksCount: imp.length,
-    });
-    this.updateContents();
+    }, this.updateContents());
   }
 
   updateContents() {
@@ -138,10 +159,32 @@ export class TodoApp extends Component {
       case "search":
         this.handleSearch(newValue);
         return;
+      case "update":
+          this.handleUpdate(taskId, newValue);
+          return;
       default:
         return;
     }
   };
+  handleUpdate(taskId , newValue){
+    const newMasterList = this.updateTitle(taskId , this.state.masterList , newValue.task)
+    this.setState(
+      {
+        masterList: newMasterList,
+      },
+      this.updateCurrentList(this.state.currentSection)
+    );
+  };
+
+  updateTitle=(taskId, list, title)=>{
+  for (let index=0; index < list.length; index++){
+    if (list[index].id === taskId) {
+      list[index].task = title;
+    }
+  } 
+  return list
+  }
+  
 
   handleSearch = (SearchPhrase) => {
     var results = [];
@@ -151,10 +194,11 @@ export class TodoApp extends Component {
       }
     }
     this.setState({
-      currentList: results
-    });
-    this.taskCounter();
+      currentList: results,
+      currentSection: "search",
+    }, this.updateCurrentList(this.state.currentSection));
   };
+  
   deleteTask = (taskId) => {
     const newMasterList = this.state.masterList.filter(
       (task) => task.id !== taskId
@@ -163,7 +207,7 @@ export class TodoApp extends Component {
       {
         masterList: newMasterList,
       },
-      this.taskCounter
+      this.updateCurrentList(this.state.currentSection)
     );
   };
 
@@ -177,22 +221,22 @@ export class TodoApp extends Component {
     this.setState({
       masterList: masterListCopy,
     });
-    this.taskCounter();
+    this.updateCurrentList(this.state.currentSection);
   };
 
   toggleCompleted = (taskId) => {
     const completedTask = this.state.masterList.filter(
-      (task) => task.id === taskId
+      (task) => String(task.id) === String(taskId)
     );
+
     completedTask[0].isCompleted = !completedTask[0].isCompleted;
-    const newMasterList = this.state.masterList.filter(
+    let newMasterList = this.state.masterList.filter(
       (task) => task.id !== taskId
     );
-    newMasterList.push(completedTask[0]);
     this.setState({
       masterList: newMasterList,
     });
-    this.taskCounter();
+    this.updateCurrentList(this.state.currentSection);
   };
 
   render() {
@@ -200,10 +244,10 @@ export class TodoApp extends Component {
       <div className="App">
         <Header action={this.handleAction} />
         <div className="wrapper">
-          <nav id="sidebar">
+          <nav className="d-none d-sm-block">
             <Aside
               updateList={this.updateCurrentList}
-              allTasks={this.state.currentList}
+              allTasks={this.state.masterList}
               taskCount={{
                 total: this.state.totalTasksCount,
                 today: this.state.todayTasksCount,
@@ -215,17 +259,25 @@ export class TodoApp extends Component {
             <AddNewTask
               updateNewTask={this.handleAction} />
             <TodoListBox
-              allTasks={this.state.currentList}
+              allTasks={this.state.currentSection!=="search" ? this.state.masterList: this.state.currentList}
               currentSection={this.state.currentSection}
-              updateToCompleted={this.toggleCompleted}
-              updateNewTask={this.handleNewItem}
               action={this.handleAction}
-            />
+              />
           </div>
-          <ReactPlayer url={this.state.videoLink}
-                        playing = {true}
-          />
-
+          <Modal
+            show={this.state.playAd}
+            onHide={this.handleModalClose}
+            dialogClassName="modal-640"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Promotional Video</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ReactPlayer url={this.state.videoLink}
+                playing={true}
+              />
+            </Modal.Body>
+          </Modal>
         </div>
       </div>
     );

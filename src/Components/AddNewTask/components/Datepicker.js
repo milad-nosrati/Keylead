@@ -36,10 +36,10 @@ class Datepicker extends React.Component {
         fontSize: '0.8rem',
         border: '0 solid transparent',
         borderRadius: '5px',
-        color: 'var(--color-grey-dark-secondary',
+        color: '#888',
         outline: 'none',
         backgroundColor: 'transparent',
-        fontWeight: 400,
+        fontWeight: '400',
       }}
     />
   )

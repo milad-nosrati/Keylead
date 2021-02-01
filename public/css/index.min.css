@@ -75,15 +75,21 @@ body {
 #QuickSearch{
   background-color: var(--transparent);
   font-size: 0.8rem;
+  font-weight: 400;;
   height:auto;
   padding: 0.5rem;
   border: 1px solid var(--color-grey-light-secondary);
   border-radius: 5 0 5 0;
   border-right: none;
   padding-left: 1rem;
+  color: var(--color-grey-light-primary) ;
 }
+#QuickSearch::placeholder{
+  color: var(--color-grey-light-primary);
+}
+
 #QuickSearch:focus{
-  background-color: var(--color-grey-light-secondary);
+  background-color: var(--color-grey-dark-secondary);
   color: var(--color-grey-light-primary);
 }
 #search-icon{
@@ -93,6 +99,16 @@ body {
   border: 1px solid var(--color-grey-light-secondary);
   border-left: none;
 }
+.form-control{
+  color:var(--color-grey-light-secondary);
+  height: min-content;
+  padding: 0;
+}
+.form-control:focus{
+  background-color: transparent;
+  color:var(--color-grey-light-secondary);
+}
+
 #search-icon:hover{
   background-color: var(--color-grey-light-primary) !important;
   color: var(--white) !important;
@@ -138,7 +154,7 @@ body {
     align-items: stretch;
 }
 
-#sidebar {
+.sidebar {
     min-width: 250px;
     max-width: 250px;
     color: var(--color-grey-light-secondary);
@@ -223,8 +239,36 @@ background-color: transparent;
   border: none;
   background-color: transparent;
   cursor: pointer;
-  ;
 }
+.modal-640{
+  min-width: 670px;
+  width:auto;
+  min-height: 380px;
+  height: auto;
+}
+.modal-content{
+  background-color: var(--color-grey-dark-primary);
+}
+.player-wrapper {
+  width: 640px; 
+  height: 360px; 
+}
+.react-player {
+  padding-top: 56.25%; 
+  position: relative;
+}
+
+.react-player > div {
+  position: absolute; 
+}
+.popover-body{
+  color: var(--color-grey-dark-secondary);
+  font-weight: 400;
+}
+.nav-link{
+  padding:0.5rem 0.5rem;
+}
+
 #content {
     width: 100%;
     padding: 0 15px;
@@ -233,6 +277,12 @@ background-color: transparent;
     background-image: url(../images/content-bg.jpg);
     border-radius: 5px;
     border: 1px solid var(--color-grey-dark-primary);
+}
+.light-text{
+  color: var(--color-grey-light-primary);
+}
+.text-delete{
+  color:var(--color-grey-light-secondary);
 }
 
 @media (max-width: 768px) {

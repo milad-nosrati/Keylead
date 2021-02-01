@@ -20,11 +20,16 @@ export default class Example extends React.Component {
   render() {
     return (
       <div>
-        <span id="notification" >
-        <span  className="fa fa-bell" />
+        <span id="settingMenu" >
+        <span  className="fa fa-cog" />
         </span>
-        <Popover placement="bottom" isOpen={this.state.popoverOpen} target="notification" toggle={this.toggle}>
-          <PopoverBody >No new notification!</PopoverBody>
+        <Popover placement="bottom" isOpen={this.state.popoverOpen} target="settingMenu" toggle={this.toggle}>
+          <PopoverBody >
+            Setting<br/>
+            My account<br/>
+            <hr/>
+            Log out<br/>
+          </PopoverBody>
         </Popover>
       </div>
     );

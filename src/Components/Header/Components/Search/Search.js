@@ -13,12 +13,25 @@ export class Search extends Component {
   state = {
     searchPhrase: ""
   }
-  handleChange =(e) => {
-    this.setState({
-      searchPhrase: e.target.value
-    })
+
+  handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.setState({
+        newTaskTitle: e.target.value
+      }, this.handleAddItem);
+    }
   }
-  searchPhrase = () => {
+  handleKeyDown=(e)=>{
+
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.setState({
+        searchPhrase: e.target.value
+      }, this.searchPhrase);
+    }
+  }
+  searchPhrase = (e) => {
+
     this.props.action ("search" , null, this.state.searchPhrase )
   };
 
@@ -34,7 +47,7 @@ export class Search extends Component {
               id="QuickSearch"
               placeholder="Quick Search"
               aria-label="Quick Search"
-              onChange={this.handleChange}
+              onKeyDown={this.handleKeyDown}
             />
             <InputGroupAddon addonType="append">
               <InputGroupText id="search-icon" onClick={this.searchPhrase}>

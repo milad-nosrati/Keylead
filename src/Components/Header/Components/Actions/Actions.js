@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Nav, NavItem, NavLink } from "reactstrap";
-import Notifications from "./Components/Notifications"
+import Notifications from "./Components/Notifications";
+import SettingMenu from "./Components/SettingMenu";
 
 export class Actions extends Component {
   constructor(props){
@@ -18,13 +19,14 @@ export class Actions extends Component {
         <Nav>
           <NavItem>
             <NavLink className="text-white cursor-pointer">
-              <Notifications />
+            <Notifications />
               
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink className="text-white cursor-pointer">
-              <span  className="fa fa-cog" />
+
+              <SettingMenu />
             </NavLink>
           </NavItem>
         </Nav>

@@ -21,7 +21,10 @@ export class Header extends Component {
           className="d-flex justify-content-between align-items-center nav-bg"
         >
           <Logo />
-          <Search  action = {this.handleAction} />
+          <div className="d-none d-md-block">
+            <Search  action = {this.handleAction}  />
+          </div>
+          
           <Actions 
                         action = {this.handleAction} 
                         />

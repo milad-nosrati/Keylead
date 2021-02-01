@@ -14,9 +14,7 @@ export class TodoListBox extends Component {
     this.arrangeTasks = this.arrangeTasks.bind(this);
   }
 
-  componentDidMount() {
-    this.filterTasks(this.props.currentSection);
-  }
+
 
   formatDate = (taskDate) => {
     const today = new Date();
@@ -28,10 +26,19 @@ export class TodoListBox extends Component {
       return false
     }
   }
+  
+  componentDidMount() {
+    this.filterTasks(this.props.currentSection);
+  }
 
+  componentDidUpdate(prevprops){
+    if(this.props.allTasks !== prevprops.allTasks || this.props.currentSection !== prevprops.currentSection){
+      this.filterTasks(this.props.currentSection);
+    }
+  }
   filterTasks(status) {
     let filteredData = [];
-    if (status === "all") {
+    if (status === "all" || status === "search") {
       filteredData = this.props.allTasks;
     }
     if (status === "today") {
@@ -43,14 +50,13 @@ export class TodoListBox extends Component {
     this.arrangeTasks(filteredData);
   }
 
-  arrangeTasks(data) {
+  arrangeTasks(data, prevprops) {
     const active = data.filter((task) => task.isCompleted !== true);
     const completed = data.filter((task) => task.isCompleted === true);
     this.setState({
       activeTasks: active,
       completedTasks: completed
     });
-    console.log(active);
   }
 
   handleAction(action, taskId, newValue) {
