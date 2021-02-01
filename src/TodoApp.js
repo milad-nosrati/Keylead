@@ -18,7 +18,7 @@ export class TodoApp extends Component {
       totalTasksCount: 0,
       currentSection: "all",
       addCounter: 0,
-      videoLink: 'https://static.cdn.asset.aparat.com/avt/29522670_15s.mp4',
+      videoLink: '',
       playAd: false,
       editMode: false,
       targetTask: 0,
