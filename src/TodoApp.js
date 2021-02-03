@@ -84,7 +84,7 @@ export class TodoApp extends Component {
       axios.get(`https://api.aparat.com/fa/v1/video/video/mostViewedVideos`)
         .then(res => {
           console.log(res.data);
-          let link = res.data[0].attributes.preview_src;
+          let link = res.data.data[0].attributes.preview_src;
           this.setState({
             videoLink: link
           })
