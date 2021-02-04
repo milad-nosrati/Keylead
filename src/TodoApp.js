@@ -83,7 +83,6 @@ export class TodoApp extends Component {
       //PLease Note, aparat will not let you get the api from development environment - API can only be fetched from server.
       axios.get(`https://api.aparat.com/fa/v1/video/video/mostViewedVideos`)
         .then(res => {
-          console.log(res.data);
           let link = res.data.data[0].attributes.preview_src;
           this.setState({
             videoLink: link
