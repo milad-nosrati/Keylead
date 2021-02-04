@@ -85,7 +85,7 @@ export class TodoApp extends Component {
         .catch(err => {
           //this cathch the error and set a valid link to videolink.
           //only for development environment and should be removed in  production.
-          const defraultVideoLink = "https://static.cdn.asset.aparat.com/avt/29593961_15s.mp4";
+          //const defraultVideoLink = "https://static.cdn.asset.aparat.com/avt/29593961_15s.mp4";
           this.setState({
             videoLink: defraultVideoLink,
           })
