@@ -43,8 +43,8 @@ export class TodoList extends Component {
       let newTask = this.state.targetTask;
       newTask.task = e.target.value;
       this.setState({
-       targetTask: newTask,
-          editMode: false,
+        targetTask: newTask,
+        editMode: false,
       }, this.handleAction("update", this.state.targetTask.id, this.state.targetTask));
     }
   }
@@ -64,51 +64,47 @@ export class TodoList extends Component {
 
   render() {
     return (
-      <div className="d-flex justify-content-between"
+      <div className='d-flex flex-row'
         onMouseLeave={this.hideContent}
-        onMouseEnter={this.showContent}
-      >
-        <div className="clearfix d-flex justify-content-start">
-          <div className="w-10">
-            <Star
-              taskId={this.props.id}
-              isStared={this.props.isStared}
-              action={this.handleAction}
-            />
-          </div>
-          <div className="d-flex flex-row justifty-content-between w-80">
-            <div className="d-flex flex-row justify-content-start">
-              <CustomInput
-                className={`${this.props.isCompleted
-                    ? "text-muted text-strike-through"
-                    : "text-light "
-                  }`}
-                type="checkbox"
-                id={this.props.id}
-                defaultChecked={this.props.isCompleted}
-                onClick={this.toggleCompleted}
-              />
-              <span className={this.state.editMode ? "d-none" : "d-block"} >
-                {this.props.task}
-              </span>
-              <FormControl
-                id={this.props.id}
-                className={this.state.editMode ? "d-block no-border trans-bg" : "d-none"}
-                placeholder={this.props.task}
-                aria-label={this.props.task}
-                aria-describedby="modify-a-task"
-                onKeyDown={this.handleKeyDown}
-              />
-            </div>
-          </div>
+        onMouseEnter={this.showContent}   >
+
+        <div>
+          <Star
+            taskId={this.props.id}
+            isStared={this.props.isStared}
+            action={this.handleAction}
+          />
         </div>
-        <div className="clearfix d-flex justify-content-end ">
-          <div className={this.state.showHiddenContent ? "float-right   mr-1 cursor-pointer" : "d-none   mr-1"}>
-            <Actions
-              taskId={this.props.id}
-              action={this.handleAction}
-              edit={this.handleEdit} />
-          </div>
+        <div>
+          <CustomInput
+            className={`${this.props.isCompleted
+              ? "text-muted text-strike-through"
+              : "text-light "
+              }`}
+            type="checkbox"
+            id={this.props.id}
+            defaultChecked={this.props.isCompleted}
+            onClick={this.toggleCompleted}
+          />
+        </div>
+        <div className="flex-grow-1">
+          <span className={this.state.editMode ? "d-none" : "d-block"} >
+            {this.props.task}
+          </span>
+          <FormControl
+            id={this.props.id}
+            className={this.state.editMode ? "d-block no-border trans-bg p-0 w-100" : "d-none"}
+            placeholder={this.props.task}
+            aria-label={this.props.task}
+            aria-describedby="modify-a-task"
+            onKeyDown={this.handleKeyDown}
+          />
+        </div>
+        <div className={this.state.showHiddenContent ? "float-right   mr-1 cursor-pointer" : "d-none   mr-1"}>
+          <Actions
+            taskId={this.props.id}
+            action={this.handleAction}
+            edit={this.handleEdit} />
         </div>
       </div>
     );

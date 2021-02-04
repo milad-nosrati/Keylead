@@ -3,10 +3,9 @@ import Header from "./Components/Header";
 import Aside from "./Components/Aside";
 import TodoListBox from "./Components/TodoListBox";
 import AddNewTask from "./Components/AddNewTask";
-import axios from 'axios';
 import ReactPlayer from 'react-player';
 import { Modal } from 'react-bootstrap';
-
+import  axios from 'axios';
 export class TodoApp extends Component {
   constructor(props) {
     super(props);
@@ -24,14 +23,7 @@ export class TodoApp extends Component {
       targetTask: 0,
     };
 
-    this.updateContents = this.updateContents.bind(this);
-    this.toggleCompleted = this.toggleCompleted.bind(this);
-    this.handleNewItem = this.handleNewItem.bind(this);
-    this.checkAdPlayback = this.checkAdPlayback.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
     this.taskcounter = this.taskCounter.bind(this);
-    this.updateCurrentList = this.updateCurrentList.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this)
   }
 
   componentDidMount() {
@@ -49,9 +41,9 @@ export class TodoApp extends Component {
       return false
     }
   }
-  rearrangeIDs(){
+  rearrangeIDs = () => {
     let newMasterList = this.state.masterList;
-    for (let i=0; i<newMasterList.length; ++i){
+    for (let i = 0; i < newMasterList.length; ++i) {
       newMasterList[i].id = i
     }
     this.setState({
@@ -79,15 +71,23 @@ export class TodoApp extends Component {
   };
 
   checkAdPlayback = () => {
-    if (this.state.addCounter > 4) {
+    if (this.state.addCounter > 1) {
       //PLease Note, aparat will not let you get the api from development environment - API can only be fetched from server.
       axios.get(`https://api.aparat.com/fa/v1/video/video/mostViewedVideos`)
         .then(res => {
-          let link = res.data.data[0].attributes.preview_src;
+          console.log(res.data);
+          const linkToVideo = res.data.data[0].attributes.preview_src;
           this.setState({
-            videoLink: link
-          })
+            videoLink : linkToVideo,
+          });
         })
+        .catch(err => {
+            console.log(err);
+            const defraultVideoLink = "https://static.cdn.asset.aparat.com/avt/29593961_15s.mp4";
+            this.setState({
+              videoLink : defraultVideoLink,
+            })
+          })
       this.setState({
         addCounter: 0,
         playAd: true
@@ -118,7 +118,7 @@ export class TodoApp extends Component {
     if (currentState === "important") {
       filteredList = this.state.masterList.filter((task) => task.isStared === true);
     }
-    if(currentState === "search"){
+    if (currentState === "search") {
       filteredList = this.state.currentList;
     }
     this.setState({
@@ -127,7 +127,7 @@ export class TodoApp extends Component {
     }, this.taskCounter());
   };
 
-  taskCounter() {
+  taskCounter = () => {
     const active = this.state.masterList.filter((task) => task.isCompleted !== true);
     const imp = active.filter((task) => task.isStared === true);
     const today = active.filter((task) => this.formatDate(task.date));
@@ -138,7 +138,7 @@ export class TodoApp extends Component {
     }, this.updateContents());
   }
 
-  updateContents() {
+  updateContents = () => {
     localStorage.setItem('masterList', JSON.stringify(this.state.masterList));
   }
 
@@ -160,14 +160,14 @@ export class TodoApp extends Component {
         this.handleSearch(newValue);
         return;
       case "update":
-          this.handleUpdate(taskId, newValue);
-          return;
+        this.handleUpdate(taskId, newValue);
+        return;
       default:
         return;
     }
   };
-  handleUpdate(taskId , newValue){
-    const newMasterList = this.updateTitle(taskId , this.state.masterList , newValue.task)
+  handleUpdate = (taskId, newValue) => {
+    const newMasterList = this.updateTitle(taskId, this.state.masterList, newValue.task)
     this.setState(
       {
         masterList: newMasterList,
@@ -176,15 +176,15 @@ export class TodoApp extends Component {
     );
   };
 
-  updateTitle=(taskId, list, title)=>{
-  for (let index=0; index < list.length; index++){
-    if (list[index].id === taskId) {
-      list[index].task = title;
+  updateTitle = (taskId, list, title) => {
+    for (let index = 0; index < list.length; index++) {
+      if (list[index].id === taskId) {
+        list[index].task = title;
+      }
     }
-  } 
-  return list
+    return list
   }
-  
+
 
   handleSearch = (SearchPhrase) => {
     var results = [];
@@ -198,7 +198,7 @@ export class TodoApp extends Component {
       currentSection: "search",
     }, this.updateCurrentList(this.state.currentSection));
   };
-  
+
   deleteTask = (taskId) => {
     const newMasterList = this.state.masterList.filter(
       (task) => task.id !== taskId
@@ -259,10 +259,10 @@ export class TodoApp extends Component {
             <AddNewTask
               updateNewTask={this.handleAction} />
             <TodoListBox
-              allTasks={this.state.currentSection!=="search" ? this.state.masterList: this.state.currentList}
+              allTasks={this.state.currentSection !== "search" ? this.state.masterList : this.state.currentList}
               currentSection={this.state.currentSection}
               action={this.handleAction}
-              />
+            />
           </div>
           <Modal
             show={this.state.playAd}

@@ -102,7 +102,7 @@ body {
 .form-control{
   color:var(--color-grey-light-secondary);
   height: min-content;
-  padding: 0;
+
 }
 .form-control:focus{
   background-color: transparent;

@@ -70,7 +70,7 @@ export class TodoListBox extends Component {
           <div
             id="no-active-task"
             className="text-center my-5 mx-auto text-muted">
-            Hurray, all done and dusted.
+            {this.props.currentSection === 'search' ? 'SOrry, No results' : 'Hurray, all done and dusted' }
           </div>
         ) : (
             <ul className="list-group w-100 pt-1  ">
