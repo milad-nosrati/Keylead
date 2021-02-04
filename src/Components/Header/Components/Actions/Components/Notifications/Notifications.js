@@ -5,13 +5,12 @@ export default class Example extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
     this.state = {
       popoverOpen: false
-    };
+    }
   }
 
-  toggle() {
+  toggle = () => {
     this.setState({
       popoverOpen: !this.state.popoverOpen
     });

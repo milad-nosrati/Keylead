@@ -8,7 +8,7 @@ export class Logo extends Component {
       <Fragment>
         <NavbarBrand href="/">
           <img src={LogoImage} alt='TodoList Logo' width='28px' height='28px' className="ml-2"/>
-          <span id="logo-brand" className="text-white"> TodoList</span>
+          <span id="logo-brand" className="text-white"> Todo List</span>
         </NavbarBrand>
       </Fragment>
     );

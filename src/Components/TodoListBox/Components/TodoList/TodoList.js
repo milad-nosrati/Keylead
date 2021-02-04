@@ -7,6 +7,7 @@ import { FormControl } from 'react-bootstrap';
 export class TodoList extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       showHiddenContent: false,
       editMode: false,
@@ -18,12 +19,7 @@ export class TodoList extends Component {
         categury: "inbox",
         isStared: false
       }
-    };
-    this.showContent = this.showContent.bind(this);
-    this.hideContent = this.hideContent.bind(this);
-    this.toggleCompleted = this.toggleCompleted.bind(this);
-    this.handleAction = this.handleAction.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
+    }
   }
 
   showContent = (e) => {
@@ -39,6 +35,7 @@ export class TodoList extends Component {
   }
 
   handleKeyDown = (e) => {
+    //submit the form
     if (e.key === 'Enter') {
       let newTask = this.state.targetTask;
       newTask.task = e.target.value;
@@ -47,8 +44,16 @@ export class TodoList extends Component {
         editMode: false,
       }, this.handleAction("update", this.state.targetTask.id, this.state.targetTask));
     }
+    //cancel Eidt process
+    if(e.key === 'Escape'){
+      this.setState({
+        editMode:false,
+      })
+    }
+
   }
-  handleEdit(taskId) {
+
+  handleEdit = (taskId) => {
     let newTask = this.state.targetTask;
     newTask.id = taskId;
     this.setState({
@@ -56,7 +61,6 @@ export class TodoList extends Component {
       targetTask: newTask,
     })
   }
-
 
   handleAction = (action, taskId, newValue) => {
     this.props.action(action, taskId, newValue);
@@ -67,7 +71,6 @@ export class TodoList extends Component {
       <div className='d-flex flex-row'
         onMouseLeave={this.hideContent}
         onMouseEnter={this.showContent}   >
-
         <div>
           <Star
             taskId={this.props.id}
@@ -88,7 +91,7 @@ export class TodoList extends Component {
           />
         </div>
         <div className="flex-grow-1">
-          <span className={this.state.editMode ? "d-none" : "d-block"} >
+          <span className={this.state.editMode ? "d-none" : "d-block overflow-hidden text-break"} >
             {this.props.task}
           </span>
           <FormControl

@@ -9,12 +9,18 @@ export class TodoListBox extends Component {
     this.state = {
       activeTasks: [],
       completedTasks: [],
-    };
-    this.handleAction = this.handleAction.bind(this);
-    this.arrangeTasks = this.arrangeTasks.bind(this);
+    }
   }
 
+  componentDidMount() {
+    this.filterTasks(this.props.currentSection);
+  }
 
+  componentDidUpdate(prevprops) {
+    if (this.props.allTasks !== prevprops.allTasks || this.props.currentSection !== prevprops.currentSection) {
+      this.filterTasks(this.props.currentSection);
+    }
+  }
 
   formatDate = (taskDate) => {
     const today = new Date();
@@ -26,16 +32,7 @@ export class TodoListBox extends Component {
       return false
     }
   }
-  
-  componentDidMount() {
-    this.filterTasks(this.props.currentSection);
-  }
 
-  componentDidUpdate(prevprops){
-    if(this.props.allTasks !== prevprops.allTasks || this.props.currentSection !== prevprops.currentSection){
-      this.filterTasks(this.props.currentSection);
-    }
-  }
   filterTasks(status) {
     let filteredData = [];
     if (status === "all" || status === "search") {
@@ -50,7 +47,7 @@ export class TodoListBox extends Component {
     this.arrangeTasks(filteredData);
   }
 
-  arrangeTasks(data, prevprops) {
+  arrangeTasks = (data, prevprops) => {
     const active = data.filter((task) => task.isCompleted !== true);
     const completed = data.filter((task) => task.isCompleted === true);
     this.setState({
@@ -59,7 +56,7 @@ export class TodoListBox extends Component {
     });
   }
 
-  handleAction(action, taskId, newValue) {
+  handleAction = (action, taskId, newValue) => {
     this.props.action(action, taskId, newValue);
   }
 
@@ -70,34 +67,43 @@ export class TodoListBox extends Component {
           <div
             id="no-active-task"
             className="text-center my-5 mx-auto text-muted">
-            {this.props.currentSection === 'search' ? 'SOrry, No results' : 'Hurray, all done and dusted' }
+            {this.props.currentSection === 'search' ? 'Sorry, No results' : 'Hurray, all done and dusted'}
           </div>
         ) : (
-            <ul className="list-group w-100 pt-1  ">
-              {this.state.activeTasks.map(item => (
-                <li
-                  key={item.id}
-                  className="list-group-item list-bg"
-                >
-                  <TodoList
-                    id={item.id}
-                    task={item.task}
-                    date={item.date}
-                    isCompleted={item.isCompleted}
-                    categury={item.categury}
-                    isStared={item.isStared}
-                    action={this.handleAction}
-                  />
-                </li>
-              ))}
-            </ul>
+            <Accordion defaultActiveKey="0">
+              <Card className="trans-bg">
+                <Accordion.Toggle as={Card.Header} eventKey="0" >
+                  Active Tasks <span className="fa fa-angle-double-right" />
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <ul className="list-group w-100 pt-1  ">
+                    {this.state.activeTasks.map(item => (
+                      <li
+                        key={item.id}
+                        className="list-group-item list-bg"
+                      >
+                        <TodoList
+                          id={item.id}
+                          task={item.task}
+                          date={item.date}
+                          isCompleted={item.isCompleted}
+                          categury={item.categury}
+                          isStared={item.isStared}
+                          action={this.handleAction}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
           )}
         <div className={this.state.completedTasks.length === 0 ? "d-none" : ""}>
           <Accordion defaultActiveKey="1">
             <Card className="trans-bg">
               <Accordion.Toggle as={Card.Header} eventKey="0" >
-                Completed Tasks <span  className="fa fa-angle-double-right" />
-                </Accordion.Toggle>
+                Completed Tasks <span className="fa fa-angle-double-right" />
+              </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <ul className="list-group w-100 pt-1 ">
                   {this.state.completedTasks.map(item => (
@@ -117,7 +123,6 @@ export class TodoListBox extends Component {
                     </li>
                   ))}
                 </ul>
-
               </Accordion.Collapse>
             </Card>
           </Accordion>

@@ -4,28 +4,22 @@ import Notifications from "./Components/Notifications";
 import SettingMenu from "./Components/SettingMenu";
 
 export class Actions extends Component {
-  constructor(props){
-    super(props);
-    this.handleAction = this.handleAction.bind(this);
 
+  handleAction = (action, taskId, newValue) => {
+    this.props.action(action, taskId, newValue);
   }
-  handleAction(action , taskId, newValue){
-    this.props.action(action , taskId, newValue);
-  }
+  
   render() {
     return (
       <Fragment>
-        
         <Nav>
           <NavItem>
             <NavLink className="text-white cursor-pointer">
-            <Notifications />
-              
+              <Notifications />
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink className="text-white cursor-pointer">
-
               <SettingMenu />
             </NavLink>
           </NavItem>

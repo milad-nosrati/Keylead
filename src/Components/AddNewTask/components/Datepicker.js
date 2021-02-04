@@ -5,30 +5,32 @@ import DatePicker from "react-modern-calendar-datepicker";
 class Datepicker extends React.Component {
   constructor(props) {
     super(props);
-    const todayDate= new Date();
+
+    const todayDate = new Date();
+
     this.state = {
-      selectedDay: {day: todayDate.getDate(),
-                    month: todayDate.getMonth()+1 , 
-                    year:todayDate.getFullYear()}
-    };
-    this.handleSelectDay = this.handleSelectDay.bind(this);
-    this.passDataTOParent = this.passDataTOParent.bind(this);
-  }
-    passDataTOParent = () =>{
-      this.props.selectedDate(this.state.selectedDay);
+      selectedDay: {
+        day: todayDate.getDate(),
+        month: todayDate.getMonth() + 1,
+        year: todayDate.getFullYear()
+      }
     }
+  }
 
-    handleSelectDay=(date)=>{
-      this.setState({
-        selectedDay: date
-      }, this.passDataTOParent);
-    };
+  passDataTOParent = () => {
+    this.props.selectedDate(this.state.selectedDay);
+  }
 
-  // render regular HTML input element
+  handleSelectDay = (date) => {
+    this.setState({
+      selectedDay: date
+    }, this.passDataTOParent);
+  }
+
   renderCustomInput = ({ ref }) => (
     <input
       readOnly
-      ref={ref} // necessary
+      ref={ref} 
       placeholder="Due Date"
       value={this.state.selectedDay ? ` ${this.state.selectedDay.day}/${this.state.selectedDay.month}/${this.state.selectedDay.year}` : ''}
       style={{
@@ -43,18 +45,18 @@ class Datepicker extends React.Component {
       }}
     />
   )
-render(){
-  return (
-    <DatePicker
-      onChange={(date) => this.handleSelectDay(date)}
-      renderInput={this.renderCustomInput} // render a custom input
-      shouldHighlightWeekends
-      dateFormat="dd/MM/yyyy"
-      className=" datepicker-input"
-    />
-  );
-}
-  
+
+  render() {
+    return (
+      <DatePicker
+        onChange={(date) => this.handleSelectDay(date)}
+        renderInput={this.renderCustomInput} 
+        shouldHighlightWeekends
+        dateFormat="dd/MM/yyyy"
+        className=" datepicker-input"
+      />
+    );
+  }
 };
 
 export default Datepicker;

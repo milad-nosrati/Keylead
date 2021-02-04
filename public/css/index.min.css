@@ -69,7 +69,6 @@ body {
   font-size: 1.1rem;
   font-family: 'Open Sans', sans-serif;
   margin-left:5px;
-  text-transform: uppercase;
 }
 
 #QuickSearch{
@@ -200,8 +199,9 @@ body {
   background-color: var(--text-active);
 }
 .active{
-  color: var(--color-grey-light-secondary)
+  color: var(--color-grey-light-secondary) !important;
 }
+
 .no-border{
   border: 0 solid transparent;
 }
@@ -283,6 +283,9 @@ background-color: transparent;
 }
 .text-delete{
   color:var(--color-grey-light-secondary);
+}
+.Toastify__toast--default {
+  background-color: var(--color-grey-dark-primary);
 }
 
 @media (max-width: 768px) {
